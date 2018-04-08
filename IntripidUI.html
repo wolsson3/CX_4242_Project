@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta name="viewport" content="initial-scale=1.0">
+        <meta charset="utf-8">
+        <style>
+            #mainMap {
+/*                top: 10px;
+                left: 0px;
+                height: 400px;
+                width:  400px;
+                padding: 5px 5px 5px 5px;*/
+                height: 400px;
+                width: 100%;
+            }
+/*            #userData {
+                top: 10px;
+                left: 410px;
+                height: 400px;
+                width: 400px;
+                padding: 5px 5px 5px 5px;
+            }*/
+/*            html, body, #map {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 100%;
+            }*/
+        </style>
+    </head>
+
+    <body>
+
+        <div id="mainMap"></div>
+        <div id="userData">
+            <form name="allData" id="allData">
+                <h4>Destinations</h4>
+                <input type="text" name="destinations">
+                <h4>Car Type</h4>
+                <input type="text" name="carType">
+
+        </div>
+
+        <script type="text/javascript">
+            var map;
+
+            function initMap() {
+
+                var dirService = new google.maps.DirectionsService();
+                var dirDisplay = new google.maps.DirectionsRenderer();
+
+                map = new google.maps.Map(document.getElementById('mainMap'), {
+                    center: {lat: 39.8283, lng: -98.5795},
+                    zoom: 4
+                });
+
+                dirDisplay.setMap(map);
+                routeCalc(dirService, dirDisplay);
+            }
+
+            function routeCalc(dirService, dirDisplay) {
+
+                // var start = new google.maps.LatLng(33.753746, -84.386330);
+                // var end = new google.maps.LatLng(39.742043, -104.991531);
+                var start = "atlanta, ga";
+                var end = "denver, co";
+
+                var request = {
+                    origin: start,
+                    destination: end,
+                    travelMode: 'DRIVING'
+                };
+                dirService.route(request, function(result, status) {
+                    if (status == 'OK') {
+                        dirDisplay.setDirections(result);
+                    }
+                });
+
+                console.log()
+            }
+
+        </script>
+
+        <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4lFzeQELbnkSLDTcyl53sANXP-xOGHFw&callback=initMap"></script>
+    </body>
+</html>
+
