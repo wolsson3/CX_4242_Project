@@ -121,7 +121,7 @@
                   for (var i = 0; i < address.length; i++) {
                     if (address[i]['types'].length == 2 && address[i]['types'][0] == 'administrative_area_level_1'){
                       var state = address[i]['long_name'];
-                      console.log(state)
+                      //console.log(state)
                     }
                   }
                   //console.log(results[0]['address_components'])
@@ -242,14 +242,25 @@
                 if (status == google.maps.places.PlacesServiceStatus.OK) {
                   //document.getElementById('side_bar').innerHTML += "bounds[" + searchIndex + "] returns " + results.length + " results<br>"
                   for (var i = 0, result; result = results[i]; i++) {
-                    var marker = createMarker(result);
-                  }
-                }
+                    service.getDetails(result, function(place, status) {
+                      if (status == 'OK') {
+                        if (place.reviews && place.reviews.length > 1 && place.rating > 4) {
+                          console.log(place)
+                          var marker = createMarker(place);
+                        }
+                      }
+                    })
+                  }}
+
                 if (status != google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT) {
                   searchIndex++;
-                  if (searchIndex < boxes.length)
+                  if (searchIndex < boxes.length) {
+                    console.log('Searching boxes ' + searchIndex + "/" + boxes.length)
                     findPlaces(searchIndex);
-                } else { // delay 1 second and try again
+                  }
+                }
+
+                else { // delay 1 second and try again
                   setTimeout("findPlaces(" + searchIndex + ")", 1000);
                 }
 
