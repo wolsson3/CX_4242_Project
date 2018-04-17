@@ -1,0 +1,20 @@
+.headers off
+.separator ','
+
+    CREATE TABLE gas_prices(
+        state text,
+        latitude float,
+        longitude float,
+        gas_price float
+        );
+
+    CREATE TABLE vehicles(
+        city_mpg integer,
+        hwy_mpg integer,
+        make text,
+        model text,
+        year integer
+        );
+
+.import gas-prices.csv gas_prices
+.import vehicles.csv vehicles

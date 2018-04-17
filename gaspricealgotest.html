@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta name="viewport" content="initial-scale=1.0">
+        <meta charset="utf-8">
+        <style>
+            #mainMap {
+/*                top: 10px;
+                left: 0px;
+                height: 400px;
+                width:  400px;
+                padding: 5px 5px 5px 5px;*/
+                height: 400px;
+                width: 100%;
+            }
+/*            #userData {
+                top: 10px;
+                left: 410px;
+                height: 400px;
+                width: 400px;
+                padding: 5px 5px 5px 5px;
+            }*/
+/*            html, body, #map {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 100%;
+            }*/
+        </style>
+    </head>
+
+    <body>
+
+        <div id="mainMap"></div>
+        <div id="userData">
+
+        </div>
+
+        <!-- <script src="../CX_4242_Project/yelp-fusion/fusion/node/sample.js" type="text/javascript"></script> -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADcUevteryaNPfOIadVF7v-pJfAIBHvkU"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
+        <script src="https://cdn.rawgit.com/googlemaps/v3-utility-library/master/routeboxer/src/RouteBoxer.js" type="text/javascript"></script>
+        <script src="../lib/sql.js" type="text/javascript"></script>
+        <script type="text/javascript">
+
+            function tripCost(state_counts) {
+
+              var make = "Toyota";
+              var model = "Corolla";
+              var year = 1993;
+
+              var state_counts = {Florida: 12, Georgia: 8, Tennessee: 2};
+
+              var sql = require('sql.js');
+              var db = new sql.Database('../data/intripid.db');
+
+              
+              var stmt = db.prepare("SELECT state,gas_price FROM vehicles")
+            }
+
+        </script>
+            <input type="text" id="distance" value="3" size="2">miles of the route from
+            <input type="text" id="from" value="athens, OH" />to
+            <input type="text" id="to" value="columbus, OH" />
+            <input type="submit" onclick="route()" />
+            <br>
+            <label>type</label>
+            <input type="text" id="type" value="gas_station" />
+            <!-- eventually, we want this to be a checkbox for all places they want to see -->
+            <label>keyword</label>
+            <input type="text" id="keyword" value="" />
+            <label>name</label>
+            <input type="text" id="name" value="" />
+            <div id="towns"></div>
+
+
+    </body>
+</html>
+
