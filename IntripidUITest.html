@@ -72,7 +72,7 @@
                                   <input type="text" class="destBox" name="startingLoc" id="from" value="columbus, OH"><br>
                                   <input type="checkbox" id="isRoundTrip">Is this a round trip?<br><br>
                                   <label>Desired Destinations:</label>
-                                  <input type="text" class="destBox" name="desiredDests" id="to" value="athens, OH"><br><br>
+                                  <input type="text" class="destBox" name="desiredDests" id="desiredDests" value="athens, OH"><br><br>
                                   <label>Must Go Destinations:</label>
                                   <input type="text" class="destBox" name="mustGoDest">
                                   <label>Site Categories:</label>
@@ -261,13 +261,28 @@
               clearBoxes();
               var geocoder = new google.maps.Geocoder;
 
+              var start = document.getElementById("from").value;
+
 
               // Convert the distance to box around the route from miles to km
               distance = parseFloat(document.getElementById("distance").value) * 1.609344;
+              var rawDests = document.getElementById('desiredDests').value;
+              var destinations = rawDests.split(";");
+
+              var formattedDests = [];
+              for (var i =0; i < destinations.length; i++) {
+                  formattedDests.push({
+                      location: destinations[i],
+                      stopover: true
+                  });
+                }
+
 
               var request = {
-                origin: document.getElementById("from").value,
-                destination: document.getElementById("to").value,
+                origin: start,
+                destination: start,
+                waypoints: formattedDests,
+                optimizeWaypoints: true,
                 travelMode: google.maps.DirectionsTravelMode.DRIVING
               }
 
