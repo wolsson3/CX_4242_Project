@@ -76,7 +76,7 @@
                                   <label>Must Go Destinations:</label>
                                   <input type="text" class="destBox" name="mustGoDest">
                                   <label>Site Categories:</label>
-                                  <input type="text" id="type" value="gas_station" />
+                                  <input type="text" id="type" value="gas_station, bakery" />
                               </form>
 
 
@@ -277,6 +277,14 @@
                   });
                 }
 
+              // var inputtypes = document.getElementById('type').value;
+              // var splittypes = inputtypes.split(",");
+
+              // var type = [];
+              // for (var i =0; i < splittypes.length; i++) {
+              //     type.push(splittypes[i]);
+              //   }
+              // console.log(type)
 
               var request = {
                 origin: start,
@@ -352,6 +360,7 @@
                 else
                   request.types = [type];
               }
+
               //if (!!keyword && (keyword != "")) request.keyword = keyword;
               //if (!!name && (name != "")) request.name = name;
               service.radarSearch(request, function(results, status) {
