@@ -32,9 +32,10 @@
             }
             .container button {
                 float: right;
+                size: 50;
             }
 
-            #destForm input {
+            .destBox {
                 width: 70%;
                 float: right;
             }
@@ -46,6 +47,7 @@
             }
 
         </style>
+
     </head>
 
     <body>
@@ -68,11 +70,12 @@
 
                                 <form id="destForm">
                                     <label>Starting Location:</label>
-                                    <input type="text" name="startingLoc" id="startingLoc" value="atlanta, ga"><br><br>
+                                    <input type="text" class="destBox" name="startingLoc" id="startingLoc" value="atlanta, ga"><br>
+                                    <input type="checkbox" id="isRoundTrip">Is this a round trip?<br><br>
                                     <label>Desired Destinations:</label>
-                                    <input type="text" name="desiredDests" id="desiredDests" value="denver,co; miami, fl; boston, ma"><br><br>
+                                    <input type="text" class="destBox" name="desiredDests" id="desiredDests" value="miami, fl; houston, tx; san diego, ca; seattle, wa; chicago, il; boston, ma"><br><br>
                                     <label>Must Go Destinations:</label>
-                                    <input type="text" name="mustGoDest">
+                                    <input type="text" class="destBox" name="mustGoDest">
                                 </form>
 
 
@@ -96,8 +99,6 @@
                                     <input type="text" name="carMake"><br><br>
                                     <label>Model:</label>
                                     <input type="text" name="carModel">
-
-
                                 </form>
 
 
@@ -121,8 +122,6 @@
                                     <input type="text" name="maxDist"><br><br>
                                     <label>Maximum Trip Duration:</label>
                                     <input type="text" name="maxDuration">
-
-
                                 </form>
 
 
@@ -146,7 +145,8 @@
 
                 map = new google.maps.Map(document.getElementById('mainMap'), {
                     center: {lat: 39.8283, lng: -98.5795},
-                    zoom: 4
+                    zoom: 4,
+                    disableDefaultUI: true
                 });
 
                 dirDisplay.setMap(map);

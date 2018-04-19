@@ -1,39 +1,140 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title></title>
-        <meta name="viewport" content="initial-scale=1.0">
+        <title>Intripid</title>
+
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <meta name="viewport" content="initial-scale=1.0">
         <meta charset="utf-8">
-        <style>
-            #mainMap {
-/*                top: 10px;
-                left: 0px;
-                height: 400px;
-                width:  400px;
-                padding: 5px 5px 5px 5px;*/
-                height: 400px;
-                width: 100%;
-            }
-/*            #userData {
-                top: 10px;
-                left: 410px;
-                height: 400px;
-                width: 400px;
-                padding: 5px 5px 5px 5px;
-            }*/
-/*            html, body, #map {
-                margin: 0;
-                padding: 0;
-                height: 100%;
-                width: 100%;
-            }*/
-        </style>
+      <style>
+
+          body {
+              padding: 0px 15px 15px 15px;
+          }
+          #mainContainer {
+              width: 100%;
+              height: 100%
+              padding: 100px 100px 100px 100px;
+              float: bottom;
+          }
+          #mainMap {
+
+              height: 400px;
+              width: 50%;
+              float: left;
+          }
+          .container {
+              height: 100%;
+              width: 50%;
+              float: right;
+          }
+          .container button {
+              float: right;
+              size: 50;
+          }
+
+          .destBox {
+              width: 70%;
+              float: right;
+          }
+          #carForm p {
+              float: right;
+          }
+          .avgBox {
+              float: right;
+          }
+
+      </style>
     </head>
 
     <body>
+            <h1> Intripid </h1>
+      <div id="mainContainer">
+          <div id="mainMap"></div>
+          <div class="container">
+              <h3>Trip Details</h3><button id="rerouteBtn" onclick="route()">Calculate Route</button>
+              <p>Give us some details below so we can help plan your next trip.</p>
+              <div class="panel-group" id="accordion">
+                  <div class="panel panel-default">
+                      <div class="panel-heading">
+                          <h5 class="panel-title">
+                              <a data-toggle="collapse" data-parent="#accordion" href="#destinations">Destinations</a>
+                          </h5>
+                      </div>
+                      <div id="destinations" class="panel-collapse collapse in">
+                          <div class="panel-body">
 
-        <div id="mainMap"></div>
-        <div id="userData">
+
+                              <form id="destForm">
+                                  <label>Starting Location:</label>
+                                  <input type="text" class="destBox" name="startingLoc" id="from" value="columbus, OH"><br>
+                                  <input type="checkbox" id="isRoundTrip">Is this a round trip?<br><br>
+                                  <label>Desired Destinations:</label>
+                                  <input type="text" class="destBox" name="desiredDests" id="desiredDests" value="athens, OH"><br><br>
+                                  <label>Must Go Destinations:</label>
+                                  <input type="text" class="destBox" name="mustGoDest">
+                                  <label>Site Categories:</label>
+                                  <input type="text" id="type" value="gas_station, bakery" />
+                              </form>
+
+
+                          </div>
+                      </div>
+                  </div>
+                  <div class="panel panel-default">
+                      <div class="panel-heading">
+                          <h5 class="panel-title">
+                              <a data-toggle="collapse" data-parent="#accordion" href="#carDetails">Car Details</a>
+                          </h5>
+                      </div>
+                      <div id="carDetails" class="panel-collapse collapse in">
+                          <div class="panel-body">
+
+
+                              <form id="carForm">
+                                  <label>Year:</label><p><b>Or eneter your average MPG:</b></p>
+                                  <input type="text" name="carYear"><br><br><input type="text" name="userAvgMpg" class="avgBox">
+                                  <label>Make:</label>
+                                  <input type="text" name="carMake"><br><br>
+                                  <label>Model:</label>
+                                  <input type="text" name="carModel">
+                              </form>
+
+
+                          </div>
+                      </div>
+                  </div>
+                  <div class="panel panel-default">
+                      <div class="panel-heading">
+                          <h5 class="panel-title">
+                              <a data-toggle="collapse" data-parent="#accordion" href="#tripDetails">Additional Trip Options</a>
+                          </h5>
+                      </div>
+                      <div id="tripDetails" class="panel-collapse collapse in">
+                          <div class="panel-body">
+
+
+                              <form id="tripForm">
+                                  <label>Maximum Trip Cost:</label>
+                                  <input type="text" name="desiredMaxCost"><br><br>
+                                  <label>Maximum Trip Distance:</label>
+                                  <input type="text" name="maxDist"><br><br>
+                                  <label>Maximum Trip Duration:</label>
+                                  <input type="text" name="maxDuration"><br><br>
+                                  <label>Distance Off Route for Stops:</label>
+                                  <input type="text" id="distance" name="distance" value="3">
+                              </form>
+
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
 
         </div>
 
@@ -75,39 +176,39 @@
               // looking something like  "?marker=3"
 
               // skip the first character, we are not interested in the "?"
-              var query = location.search.substring(1);
+              // var query = location.search.substring(1);
 
-              // split the rest at each "&" character to give a list of  "argname=value"  pairs
-              var pairs = query.split("&");
-              for (var i = 0; i < pairs.length; i++) {
-                // break each pair at the first "=" to obtain the argname and value
-                var pos = pairs[i].indexOf("=");
-                var argname = pairs[i].substring(0, pos).toLowerCase();
-                var value = pairs[i].substring(pos + 1).toLowerCase();
+              // // split the rest at each "&" character to give a list of  "argname=value"  pairs
+              // var pairs = query.split("&");
+              // for (var i = 0; i < pairs.length; i++) {
+              //   // break each pair at the first "=" to obtain the argname and value
+              //   var pos = pairs[i].indexOf("=");
+              //   var argname = pairs[i].substring(0, pos).toLowerCase();
+              //   var value = pairs[i].substring(pos + 1).toLowerCase();
 
-                // process each possible argname  -  use unescape() if theres any chance of spaces
-                if (argname == "to") {
-                  document.getElementById('to').value = unescape(value);
-                }
-                if (argname == "from") {
-                  document.getElementById('from').value = unescape(value);
-                }
-                if (argname == "dist") {
-                  document.getElementById('distance').value = parseFloat(value);
-                }
-                if (argname == "type") {
-                  document.getElementById('type').value = unescape(value);
-                }
-                if (argname == "keyword") {
-                  document.getElementById('keyword').value = unescape(value);
-                }
-                if (argname == "name") {
-                  document.getElementById('name').value = unescape(value);
-                }
-                if (argname == "submit") {
-                  route();
-                }
-              }
+              //   // process each possible argname  -  use unescape() if theres any chance of spaces
+              //   if (argname == "to") {
+              //     document.getElementById('to').value = unescape(value);
+              //   }
+              //   if (argname == "from") {
+              //     document.getElementById('from').value = unescape(value);
+              //   }
+              //   if (argname == "dist") {
+              //     document.getElementById('distance').value = parseFloat(value);
+              //   }
+              //   if (argname == "type") {
+              //     document.getElementById('type').value = unescape(value);
+              //   }
+              //   if (argname == "keyword") {
+              //     document.getElementById('keyword').value = unescape(value);
+              //   }
+              //   if (argname == "name") {
+              //     document.getElementById('name').value = unescape(value);
+              //   }
+              //   if (argname == "submit") {
+              //     route();
+              //   }
+              // }
 
             }
 
@@ -160,13 +261,36 @@
               clearBoxes();
               var geocoder = new google.maps.Geocoder;
 
+              var start = document.getElementById("from").value;
+
 
               // Convert the distance to box around the route from miles to km
               distance = parseFloat(document.getElementById("distance").value) * 1.609344;
+              var rawDests = document.getElementById('desiredDests').value;
+              var destinations = rawDests.split(";");
+
+              var formattedDests = [];
+              for (var i =0; i < destinations.length; i++) {
+                  formattedDests.push({
+                      location: destinations[i],
+                      stopover: true
+                  });
+                }
+
+              // var inputtypes = document.getElementById('type').value;
+              // var splittypes = inputtypes.split(",");
+
+              // var type = [];
+              // for (var i =0; i < splittypes.length; i++) {
+              //     type.push(splittypes[i]);
+              //   }
+              // console.log(type)
 
               var request = {
-                origin: document.getElementById("from").value,
-                destination: document.getElementById("to").value,
+                origin: start,
+                destination: start,
+                waypoints: formattedDests,
+                optimizeWaypoints: true,
                 travelMode: google.maps.DirectionsTravelMode.DRIVING
               }
 
@@ -225,8 +349,8 @@
 
             function findPlaces(searchIndex) {
               var type = document.getElementById('type').value;
-              var keyword = document.getElementById('keyword').value;
-              var name = document.getElementById('name').value;
+              //var keyword = document.getElementById('keyword').value;
+              //var name = document.getElementById('name').value;
               var request = {
                 bounds: boxes[searchIndex],
               };
@@ -236,8 +360,9 @@
                 else
                   request.types = [type];
               }
-              if (!!keyword && (keyword != "")) request.keyword = keyword;
-              if (!!name && (name != "")) request.name = name;
+
+              //if (!!keyword && (keyword != "")) request.keyword = keyword;
+              //if (!!name && (name != "")) request.name = name;
               service.radarSearch(request, function(results, status) {
                 if (status == google.maps.places.PlacesServiceStatus.OK) {
                   //document.getElementById('side_bar').innerHTML += "bounds[" + searchIndex + "] returns " + results.length + " results<br>"
@@ -328,19 +453,19 @@
 
 
         </script>
-            <input type="text" id="distance" value="3" size="2">miles of the route from
+<!--             <input type="text" id="distance" value="3" size="2">miles of the route from
             <input type="text" id="from" value="athens, OH" />to
-            <input type="text" id="to" value="columbus, OH" />
-            <input type="submit" onclick="route()" />
-            <br>
+            <input type="text" id="to" value="columbus, OH" /> -->
+            <!-- <input type="submit" onclick="route()" /> -->
+<!--             <br>
             <label>type</label>
-            <input type="text" id="type" value="gas_station" />
+            <input type="text" id="type" value="gas_station" /> -->
             <!-- eventually, we want this to be a checkbox for all places they want to see -->
-            <label>keyword</label>
+<!--             <label>keyword</label>
             <input type="text" id="keyword" value="" />
             <label>name</label>
             <input type="text" id="name" value="" />
-            <div id="towns"></div>
+            <div id="towns"></div> -->
 
 
     </body>
