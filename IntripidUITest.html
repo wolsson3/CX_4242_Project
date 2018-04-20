@@ -386,7 +386,45 @@
 
 
             function recordPlaces() {
+                console.log("All Places:")
               console.log(places)
+              //               var formattedDests = [];
+              // for (var i =0; i < destinations.length; i++) {
+              //     formattedDests.push({
+              //         location: destinations[i],
+              //         stopover: true
+              //     });
+              //   }
+
+              categorieslist = [];
+              // iterate through each place
+              for (var p = 0; p < places.length; p++) {
+                // iterate through each type for this place
+                for (var t = 0; t < places[p].types.length; t++) {
+                    // assign the count to 1 if not already in the list, else increment by 1
+                    typeof categorieslist[places[p].types[t]] === 'undefined' ? categorieslist[places[p].types[t]] = 1 : categorieslist[places[p].types[t]]++;
+
+                //     if (categorieslist.length == 0) {
+                //         categorieslist.push({
+                //             type: places[p][t],
+                //             count: 1
+                //         })
+                //     } else {
+                //         // check if this type is already in categorieslist
+                //         for (var key in categorieslist) {
+                //             // if it's in the list, increment the count by one
+                //             if (places[p][t] == categorieslist[key]) {
+
+                //             }
+                //         }
+                //     }
+                 }
+              }
+              console.log("Count of Type Occurrances: *note that these overlap since sites have more than one type*")
+              console.log(categorieslist)
+
+
+
               var top3places = [];
               for (var i = 0; i < places.length; i++) {
                 var grade = places[i].reviews.length * 0.75 + places[i].rating * 0.25;
@@ -403,6 +441,7 @@
                   }
                 }
               }
+            console.log("Top 3 Places:")
             console.log(top3places)
             drivingdist = 0;
             var legs = dirresult.routes[0].legs;
@@ -415,6 +454,11 @@
             var score = places.length / drivingdist * 5 * 100;
             console.log("Expected Enjoyment Score: " + score)
             }
+
+
+
+
+
 
             function createMarker(place) {
               var placeLoc = place.geometry.location;
