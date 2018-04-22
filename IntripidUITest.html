@@ -215,16 +215,17 @@
             }
 
 
-            function geocodeLatLong(geocoder, lat, lng) {
+            function geocodeLatLong(geocoder, lat, lng, state_counts) {
               var latlng = {lat: lat, lng: lng};
               geocoder.geocode({'location': latlng}, function(results, status) {
               if (status === 'OK') {
                 if (results[0]) {
                   var address = results[0]['address_components'];
+                  console.log(address);
                   for (var i = 0; i < address.length; i++) {
                     if (address[i]['types'].length == 2 && address[i]['types'][0] == 'administrative_area_level_1'){
                       var state = address[i]['long_name'];
-                      //console.log(state)
+                      state_counts[state] = state_counts[state] ? state_counts[state] + 1 : 1;
                     }
                   }
                   //console.log(results[0]['address_components'])
@@ -238,11 +239,11 @@
                   // infowindow.setContent(results[0].formatted_address);
                   // infowindow.open(map, marker);
                 } else {
-                  window.alert('No results found');
+                  window.alert('No results found');f
                 }
               } else if (status === 'OVER_QUERY_LIMIT') {
                 setTimeout(function() {
-                  return geocodeLatLong(geocoder, lat, lng);
+                  return geocodeLatLong(geocoder, lat, lng, state_counts);
                   }, 200);
               }
             });
@@ -254,6 +255,7 @@
               // Clear any previous route boxes from the map
               clearBoxes();
               var geocoder = new google.maps.Geocoder;
+              var state_counts = {};
 
               var start = document.getElementById("from").value;
 
@@ -291,11 +293,12 @@
                   var states = [];
 
                   for (var i = 0; i < boxes.length; i++) {
-                    geocodeLatLong(geocoder, boxes[i].f.b, boxes[i].b.b);
-
+                    (geocodeLatLong(geocoder, boxes[i].f.b, boxes[i].b.b, state_counts));
                     //console.log(boxes[i].b.b)
                     //console.log(boxes[i].f.b)
                   }
+
+                  console.log(state_counts);
 
                   //console.log(states);
                   // alert(boxes.length);
@@ -455,10 +458,25 @@
             console.log("Expected Enjoyment Score: " + score)
             }
 
+            function tripCost(state_counts, mpg_data, dist) {
+              var make = "Ferrari";
+              var model = "308";
+              var year = 1985;
+              var mpg = mpg_data[make + model + year]
+              var state_names = Object.keys(state_counts);
+              var tot_boxes = 0;
+              var avg_price = 0;
 
 
+              for (state in state_counts) {
+                tot_boxes += state_counts[state];
+                avg_price += (state_counts[state] * gas_prices[state]);
+              };
 
+              avg_price = avg_price / tot_boxes;
 
+              return d3.round(((dist / mpg) * avg_price),2)
+              };
 
             function createMarker(place) {
               var placeLoc = place.geometry.location;
