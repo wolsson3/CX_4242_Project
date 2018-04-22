@@ -76,7 +76,7 @@
                                   <label>Must Go Destinations:</label>
                                   <input type="text" class="destBox" name="mustGoDest">
                                   <label>Site Categories:</label>
-                                  <input type="text" id="type" value="gas_station, bakery" />
+                                  <input type="text" id="type" value="gas_station, bakery, zoo, library, movie_theater, park, spa" />
                               </form>
 
 
@@ -348,7 +348,7 @@
                   for (var i = 0, result; result = results[i]; i++) {
                     service.getDetails(result, function(place, status) {
                       if (status == 'OK') {
-                        if (place.reviews && place.reviews.length > 10 && place.rating > 4) {
+                        if (place.reviews && place.reviews.length > 1 && place.rating > 4) {
                           var marker = createMarker(place);
                           places.push(place);
                         }
@@ -450,8 +450,8 @@
               }
             // convert from meters to miles
             drivingdist = drivingdist / 1609.344;
-            // based score on a theoretical maximum enjoyment of 1 site every 5 miles
-            var score = places.length / drivingdist * 5 * 100;
+            // based score on a theoretical maximum enjoyment of 1 site every 1 mile
+            var score = places.length / drivingdist * 1 * 100;
             console.log("Expected Enjoyment Score: " + score)
             }
 
