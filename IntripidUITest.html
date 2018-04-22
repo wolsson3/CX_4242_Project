@@ -69,14 +69,14 @@
 
                               <form id="destForm">
                                   <label>Starting Location:</label>
-                                  <input type="text" class="destBox" name="startingLoc" id="from" value="columbus, OH"><br>
+                                  <input type="text" class="destBox" name="startingLoc" id="from" value="marietta, GA"><br>
                                   <input type="checkbox" id="isRoundTrip">Is this a round trip?<br><br>
                                   <label>Desired Destinations:</label>
-                                  <input type="text" class="destBox" name="desiredDests" id="desiredDests" value="athens, OH"><br><br>
+                                  <input type="text" class="destBox" name="desiredDests" id="desiredDests" value="savannah, GA"><br><br>
                                   <label>Must Go Destinations:</label>
                                   <input type="text" class="destBox" name="mustGoDest">
                                   <label>Site Categories:</label>
-                                  <input type="text" id="type" value="gas_station, bakery, zoo, library, movie_theater, park, spa" />
+                                  <input type="text" id="type" value="bakery, zoo, library, movie_theater, park, spa, gym, department_store, city_hall, church, night_club, museum, library" />
                               </form>
 
 
@@ -124,7 +124,7 @@
                                   <label>Maximum Trip Duration:</label>
                                   <input type="text" name="maxDuration"><br><br>
                                   <label>Distance Off Route for Stops:</label>
-                                  <input type="text" id="distance" name="distance" value="3">
+                                  <input type="text" id="distance" name="distance" value="8">
                               </form>
 
 
@@ -348,7 +348,7 @@
                   for (var i = 0, result; result = results[i]; i++) {
                     service.getDetails(result, function(place, status) {
                       if (status == 'OK') {
-                        if (place.reviews && place.reviews.length > 1 && place.rating > 4) {
+                        if (place.photos && place.rating >= 3) {
                           var marker = createMarker(place);
                           places.push(place);
                         }
@@ -359,7 +359,7 @@
                 if (status != google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT) {
                   searchIndex++;
                   if (searchIndex < boxes.length) {
-                    //console.log('Searching boxes ' + searchIndex + "/" + boxes.length)
+                    console.log('Searching boxes ' + searchIndex + "/" + boxes.length)
                     findPlaces(searchIndex);
                   } else {
                     recordPlaces();
@@ -432,7 +432,7 @@
                   top3places.push(places[i]);
                 } else {
                   for (var j = 0; j < top3places.length; j++) {
-                    var othergrade = top3places[j].reviews.length * 0.75 + top3places[j].rating * 0.25;
+                    var othergrade = top3places[j].rating * 0.75 + top3places[j].photos.length * 0.25;
                     if (grade > top3places[j]) {
                       top3places.splice(j, 1);
                       top3places.push(places[i]);
@@ -450,8 +450,8 @@
               }
             // convert from meters to miles
             drivingdist = drivingdist / 1609.344;
-            // based score on a theoretical maximum enjoyment of 1 site every 1 mile
-            var score = places.length / drivingdist * 1 * 100;
+            // based score on a theoretical maximum enjoyment of 1 site every 10 miles
+            var score = places.length / drivingdist * 10 * 100;
             console.log("Expected Enjoyment Score: " + score)
             }
 
