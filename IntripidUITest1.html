@@ -156,13 +156,12 @@
                                 <input type="checkbox" name="checks" id="place1" value="restaurant" checked=True>Restaurants<br>
                                 <input type="checkbox" name="checks" id="place2" value="shopping_mall">Shopping Malls<br>
                                 <input type="checkbox" name="checks" id="place3" value="park" checked="True">Parks<br>
-                                <input type="checkbox" name="checks" id="place4" value="supermarket">Super Markets<br>
+                                <input type="checkbox" name="checks" id="place4" value="ausement_park">Amusement Park<br>
                                 <input type="checkbox" name="checks" id="place5" value="museum">Museums<br>
                                 <input type="checkbox" name="checks" id="place6" value="aquarium">Aquariums<br>
                                 <input type="checkbox" name="checks" id="place7" value="zoo">Zoos<br>
                                 <input type="checkbox" name="checks" id="place8" value="bars">Bars<br>
                                 <input type="checkbox" name="checks" id="place9" value="casino">Casinos<br>
-                                <input type="checkbox" name="checks" id="place10" value="amusement_park">Amusement Park<br>
 
                               </form>
 
@@ -221,8 +220,9 @@
 
 
         <!-- <script src="../CX_4242_Project/yelp-fusion/fusion/node/sample.js" type="text/javascript"></script> -->
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBt3FTONaRPtmq5fHy_tCI6WerJoaZ3qeY"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4lFzeQELbnkSLDTcyl53sANXP-xOGHFw&libraries=places"></script>
+<!--         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4lFzeQELbnkSLDTcyl53sANXP-xOGHFw"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script> -->
         <script src="https://cdn.rawgit.com/googlemaps/v3-utility-library/master/routeboxer/src/RouteBoxer.js" type="text/javascript"></script>
         <script type="text/javascript">
 
@@ -433,28 +433,28 @@
               console.log(places)
 
               categorieslist = [];
+              totalgrade = 0;
               // iterate through each place
               for (var p = 0; p < places.length; p++) {
                 // iterate through each type for this place
                 for (var t = 0; t < places[p].types.length; t++) {
                     // assign the count to 1 if not already in the list, else increment by 1
                     typeof categorieslist[places[p].types[t]] === 'undefined' ? categorieslist[places[p].types[t]] = 1 : categorieslist[places[p].types[t]]++;
-
                  }
               }
               console.log("Count of Type Occurrances: *note that these overlap since sites have more than one type*")
               console.log(categorieslist)
 
-
-
               var top3places = [];
               for (var i = 0; i < places.length; i++) {
-                var grade = places[i].reviews.length * 0.75 + places[i].rating * 0.25;
+                var grade = places[i].rating / 5 * 70 + places[i].reviews.length / 5 * 0.15 + places[i].photos.length / 10 * 0.15;
+                totalgrade += grade;
                 if (top3places.length < 3) {
                   top3places.push(places[i]);
+
                 } else {
                   for (var j = 0; j < top3places.length; j++) {
-                    var othergrade = top3places[j].reviews.length * 0.75 + top3places[j].rating * 0.25;
+                    var othergrade = places[j].rating / 5 * 70 + places[j].reviews.length / 5 * 0.15 + places[j].photos.length / 10 * 0.15;
                     if (grade > top3places[j]) {
                       top3places.splice(j, 1);
                       top3places.push(places[i]);
@@ -463,20 +463,19 @@
                   }
                 }
               }
+            console.log("Top 3 Places:")
+            console.log(top3places)
+            drivingdist = 0;
+            var legs = dirresult.routes[0].legs;
+              for (var k = 0; k < legs.length; ++k) {
+                  drivingdist += legs[k].distance.value;
+              }
+            // convert from meters to miles
+            drivingdist = drivingdist / 1609.344;
+            // based score on a theoretical maximum enjoyment of a 5 star site (max photo, max review) site every 10 miles
+            var score = totalgrade / (drivingdist / 10 * 100) * 100 ;
+            console.log("Expected Enjoyment Score: " + score)
 
-
-              console.log("Top 3 Places:")
-              console.log(top3places)
-              drivingdist = 0;
-              var legs = dirresult.routes[0].legs;
-                for (var k = 0; k < legs.length; ++k) {
-                    drivingdist += legs[k].distance.value;
-                }
-              // convert from meters to miles
-              drivingdist = drivingdist / 1609.344;
-              // based score on a theoretical maximum enjoyment of 1 site every 1 mile
-              var score = places.length / drivingdist * 1 * 100;
-              console.log("Expected Enjoyment Score: " + score)
 
               // UI changes
               document.getElementById("calcStatus").innerHTML = "Trip Details";
