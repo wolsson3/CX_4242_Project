@@ -26,7 +26,7 @@ EXECUTION
 
 2. Under the Destinations dropdown, enter your starting location (such as "Atlanta, GA"), desired destinations separated by a semicolon (such as "Savannah, GA; Jacksonville, FL"), must-go destinations (if we must see Savannah, enter "Savannah, GA"), and preferred site categories ("amusement_park, movie_theater, spa, zoo").
 
-3. Under the Car Details dropdown, enter the make, model, and year of the vehicle. For this demo, select 2015 BMW i8.
+3. Under the Car Details dropdown, enter the make, model, and year of the vehicle. For this demo, select 1985 Ferrari 308.
 
 4. For Additional Trip Options, leave all blank for this demo except for Distance Off Route For Stops. Leave this at the default 3 miles. Click Calculate Route.
 

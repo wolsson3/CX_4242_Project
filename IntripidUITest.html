@@ -69,14 +69,14 @@
 
                               <form id="destForm">
                                   <label>Starting Location:</label>
-                                  <input type="text" class="destBox" name="startingLoc" id="from" value="marietta, GA"><br>
+                                  <input type="text" class="destBox" name="startingLoc" id="from" value="jacksonville, FL"><br>
                                   <input type="checkbox" id="isRoundTrip">Is this a round trip?<br><br>
                                   <label>Desired Destinations:</label>
-                                  <input type="text" class="destBox" name="desiredDests" id="desiredDests" value="gainsville, GA"><br><br>
+                                  <input type="text" class="destBox" name="desiredDests" id="desiredDests" value="miami, FL"><br><br>
                                   <label>Must Go Destinations:</label>
                                   <input type="text" class="destBox" name="mustGoDest">
                                   <label>Site Categories:</label>
-                                  <input type="text" id="type" value="bakery, zoo, library, movie_theater, park, spa, gym, department_store, city_hall, church, night_club, museum, library" />
+                                  <input type="text" id="type" value="amusement_park, zoo, library, movie_theater, park, spa, gym, department_store, city_hall, church, night_club, museum, library" />
                               </form>
 
 
@@ -145,7 +145,6 @@
         <script type="text/javascript">
 
             var map = null;
-            var boxpolys = null;
             var directions = null;
             var routeBoxer = null;
             var distance = null; // km
@@ -155,6 +154,7 @@
             var places = [];
             var dirresult = null;
             var markersArray = [];
+            var boxesArray = null;
 
 
 
@@ -179,17 +179,16 @@
             }
 
 
-            function geocodeLatLong(geocoder, lat, lng, state_counts) {
+            function geocodeLatLong(geocoder, lat, lng) {
               var latlng = {lat: lat, lng: lng};
               geocoder.geocode({'location': latlng}, function(results, status) {
               if (status === 'OK') {
                 if (results[0]) {
                   var address = results[0]['address_components'];
-                  console.log(address);
                   for (var i = 0; i < address.length; i++) {
                     if (address[i]['types'].length == 2 && address[i]['types'][0] == 'administrative_area_level_1'){
                       var state = address[i]['long_name'];
-                      state_counts[state] = state_counts[state] ? state_counts[state] + 1 : 1;
+                      //console.log(state)
                     }
                   }
                   //console.log(results[0]['address_components'])
@@ -203,11 +202,11 @@
                   // infowindow.setContent(results[0].formatted_address);
                   // infowindow.open(map, marker);
                 } else {
-                  window.alert('No results found');f
+                  window.alert('No results found');
                 }
               } else if (status === 'OVER_QUERY_LIMIT') {
                 setTimeout(function() {
-                  return geocodeLatLong(geocoder, lat, lng, state_counts);
+                  return geocodeLatLong(geocoder, lat, lng);
                   }, 200);
               }
             });
@@ -217,10 +216,8 @@
 
             function route() {
               // Clear any previous route boxes from the map
-              clearBoxes();
-              clearMarkers();
+              clearOverlays();
               var geocoder = new google.maps.Geocoder;
-              var state_counts = {};
 
               var start = document.getElementById("from").value;
 
@@ -258,22 +255,10 @@
                   var states = [];
 
                   for (var i = 0; i < boxes.length; i++) {
-<<<<<<< HEAD
-                    (geocodeLatLong(geocoder, boxes[i].f.b, boxes[i].b.b, state_counts));
-                    //console.log(boxes[i].b.b)
-                    //console.log(boxes[i].f.b)
-                  }
-
-                  console.log(state_counts);
-
-                  //console.log(states);
-                  // alert(boxes.length);
-=======
                     geocodeLatLong(geocoder, boxes[i].f.b, boxes[i].b.b);
 
                   }
 
->>>>>>> 817e5c76d242d111f2b4cb3ced175095164a008b
                   drawBoxes();
                   findPlaces(0);
 
@@ -285,23 +270,14 @@
 
 
 
-            function clearMarkers() {
-              //console.log(markersArray)
-              for (var i = 0; i < markersArray.length; i++ ) {
-                markersArray[i].setMap(null);
-              }
-              markersArray.length = 0;
-            }
-
-
 
 
 
             // Draw the array of boxes as polylines on the map
             function drawBoxes() {
-              boxpolys = new Array(boxes.length);
+              boxesArray = new Array(boxes.length);
               for (var i = 0; i < boxes.length; i++) {
-                boxpolys[i] = new google.maps.Rectangle({
+                boxesArray[i] = new google.maps.Rectangle({
                   bounds: boxes[i],
                   fillOpacity: 0,
                   strokeOpacity: 1.0,
@@ -318,19 +294,17 @@
               var request = {
                 bounds: boxes[searchIndex],
               };
-              if (!!type && (type != "")) {
-                if (type.indexOf(',') > 0)
+              if (type.indexOf(',') > 0)
                   request.types = type.split(',');
                 else
                   request.types = [type];
-              }
 
               service.radarSearch(request, function(results, status) {
-                if (status == google.maps.places.PlacesServiceStatus.OK) {
+                if (status == 'OK') {
                   for (var i = 0, result; result = results[i]; i++) {
                     service.getDetails(result, function(place, status) {
                       if (status == 'OK') {
-                        if (place.photos && place.rating >= 3) {
+                        if (place.photos && place.reviews && place.rating >= 3) {
                           var marker = createMarker(place);
                           places.push(place);
                         }
@@ -338,7 +312,7 @@
                     })
                   }}
 
-                if (status != google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT) {
+                if (status != 'OVER_QUERY_LIMIT') {
                   searchIndex++;
                   if (searchIndex < boxes.length) {
                     //console.log('Searching boxes ' + searchIndex + "/" + boxes.length)
@@ -356,14 +330,22 @@
             }
 
 
-             // Clear boxes currently on the map
-            function clearBoxes() {
-              if (boxpolys != null) {
-                for (var i = 0; i < boxpolys.length; i++) {
-                  boxpolys[i].setMap(null);
+            function clearOverlays() {
+              // clear boxes
+              if (boxesArray != null) {
+                for (var i = 0; i < boxesArray.length; i++) {
+                  boxesArray[i].setMap(null);
                 }
               }
-              boxpolys = null;
+              boxesArray = null;
+
+              // clear markers
+              if (markersArray.length != 0) {
+                for (var i = 0; i < markersArray.length; i++) {
+                  markersArray[i].setMap(null);
+                }
+              }
+              markersArray.length = 0;
               }
 
 
@@ -372,7 +354,7 @@
 
 
             function recordPlaces() {
-                console.log("All Places:")
+              console.log("All Places:")
               console.log(places)
               //               var formattedDests = [];
               // for (var i =0; i < destinations.length; i++) {
@@ -383,6 +365,7 @@
               //   }
 
               categorieslist = [];
+              totalgrade = 0;
               // iterate through each place
               for (var p = 0; p < places.length; p++) {
                 // iterate through each type for this place
@@ -396,12 +379,14 @@
 
               var top3places = [];
               for (var i = 0; i < places.length; i++) {
-                var grade = places[i].reviews.length * 0.75 + places[i].rating * 0.25;
+                var grade = places[i].rating / 5 * 70 + places[i].reviews.length / 5 * 0.15 + places[i].photos.length / 10 * 0.15;
+                totalgrade += grade;
                 if (top3places.length < 3) {
                   top3places.push(places[i]);
+
                 } else {
                   for (var j = 0; j < top3places.length; j++) {
-                    var othergrade = top3places[j].rating * 0.75 + top3places[j].photos.length * 0.25;
+                    var othergrade = places[j].rating / 5 * 70 + places[j].reviews.length / 5 * 0.15 + places[j].photos.length / 10 * 0.15;
                     if (grade > top3places[j]) {
                       top3places.splice(j, 1);
                       top3places.push(places[i]);
@@ -419,10 +404,12 @@
               }
             // convert from meters to miles
             drivingdist = drivingdist / 1609.344;
-            // based score on a theoretical maximum enjoyment of 1 site every 5 miles
-            var score = places.length / drivingdist * 5 * 100;
+            // based score on a theoretical maximum enjoyment of a 5 star site (max photo, max review) site every 10 miles
+            var score = totalgrade / (drivingdist / 10 * 100) * 100 ;
             console.log("Expected Enjoyment Score: " + score)
             }
+
+
 
             function tripCost(state_counts, mpg_data, dist) {
               var make = "Ferrari";
@@ -443,6 +430,8 @@
 
               return d3.round(((dist / mpg) * avg_price),2)
               };
+
+
 
             function createMarker(place) {
               var image = {
@@ -466,15 +455,23 @@
 
                 service.getDetails(request, function(place, status) {
                   if (status == 'OK') {
-                    var contentStr = '<h5>' + place.name + '</h5><p>' + place.formatted_address;
-                    if (!!place.formatted_phone_number) contentStr += '<br>' + place.formatted_phone_number;
-                    if (!!place.website) contentStr += '<br><a target="_blank" href="' + place.website + '">' + place.website + '</a>';
-                    contentStr += '<br>' + place.types + '</p>';
-                    infowindow.setContent(contentStr);
+                    var info = '<h5>' + place.name + '</h5><p>' + place.formatted_address;
+                    if (place.formatted_phone_number) {
+                      info += '<br>' + place.formatted_phone_number;
+                    }
+
+                    info +=  '<br>' + place.rating + '/5 stars';
+
+
+                    if (place.website) {
+                      info += '<br><a target="_blank" href="' + place.website + '">' + place.website + '</a>';
+                    }
+
+                    infowindow.setContent(info);
                     infowindow.open(map, marker);
                   } else {
-                    var contentStr = "<h5>No Result, status=" + status + "</h5>";
-                    infowindow.setContent(contentStr);
+                    var info = "<h5>No Result, status=" + status + "</h5>";
+                    infowindow.setContent(info);
                     infowindow.open(map, marker);
                   }
                 });
