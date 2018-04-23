@@ -2,9 +2,11 @@ DESCRIPTION
 -----------
 This package intends to simplify the process of road trip planning. This set files contains all necessary dependencies and datasets to calculate the optimal road trip given a set of desired destinations. 
 
-Vehicle data has been scraped and cleaned from XXX. Over 50,000 data points are included for vehicle mpg rates. The Google Maps API and Places API have the capacity to search over 20 petabytes of data. Despite this extremely large amount of data, Intripid ensures the optimal sites along your route in an efficient manner.
+Vehicle data has been scraped and cleaned from the EPA's gas mileage dataset. Over 50,000 data points are included for vehicle mpg rates within Intripid.html. The Google Maps API and Places API have the capacity to search over 20 petabytes of data. Despite this extremely large amount of data, Intripid ensures the optimal sites along your route in an efficient manner.
 
 Google API's have specific rate limits for their services. The Google Maps JavaScript API provides 2,500 free map loads per 24 hours. Above this, it charges $0.50/1000 additional requests, up to 100,000 per 24 hours. The Google Places Javascript API provides 1,000 free requests per 24 hours, and 150,000 free requests if billing is enabled to verify your identity. For standard route searches, free API usage and rates should be sufficient.
+
+For documentation on our approaches and miscellaneous project materials, please see the DOC folder. All the code and data necessary to run the program are included in Intripid.html within the CODE folder. Refer to the INSTALLATION section below for information on getting a Google Maps API key which is necessary to run the program.
 
 
 
