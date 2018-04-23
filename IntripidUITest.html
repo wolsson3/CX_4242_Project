@@ -216,7 +216,7 @@
 
             function route() {
               // Clear any previous route boxes from the map
-              //clearBoxes();
+              clearBoxes();
               clearMarkers();
               var geocoder = new google.maps.Geocoder;
 
@@ -260,7 +260,7 @@
 
                   }
 
-                  //drawBoxes();
+                  drawBoxes();
                   findPlaces(0);
 
                 } else {
@@ -284,19 +284,19 @@
 
 
             // Draw the array of boxes as polylines on the map
-            // function drawBoxes() {
-            //   boxpolys = new Array(boxes.length);
-            //   for (var i = 0; i < boxes.length; i++) {
-            //     boxpolys[i] = new google.maps.Rectangle({
-            //       bounds: boxes[i],
-            //       fillOpacity: 0,
-            //       strokeOpacity: 1.0,
-            //       strokeColor: '#000000',
-            //       strokeWeight: 1,
-            //       map: map
-            //     });
-            //   }
-            // }
+            function drawBoxes() {
+              boxpolys = new Array(boxes.length);
+              for (var i = 0; i < boxes.length; i++) {
+                boxpolys[i] = new google.maps.Rectangle({
+                  bounds: boxes[i],
+                  fillOpacity: 0,
+                  strokeOpacity: 1.0,
+                  strokeColor: '#000000',
+                  strokeWeight: 1,
+                  map: map
+                });
+              }
+            }
 
 
             function findPlaces(searchIndex) {
@@ -342,15 +342,15 @@
             }
 
 
-            // Clear boxes currently on the map
-            // function clearBoxes() {
-            //   if (boxpolys != null) {
-            //     for (var i = 0; i < boxpolys.length; i++) {
-            //       boxpolys[i].setMap(null);
-            //     }
-            //   }
-            //   boxpolys = null;
-            //   }
+             // Clear boxes currently on the map
+            function clearBoxes() {
+              if (boxpolys != null) {
+                for (var i = 0; i < boxpolys.length; i++) {
+                  boxpolys[i].setMap(null);
+                }
+              }
+              boxpolys = null;
+              }
 
 
 
