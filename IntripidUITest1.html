@@ -12,6 +12,7 @@
 
           body {
               padding: 0px 15px 15px 15px;
+              height: 950px;
           }
           #mainContainer {
               width: 100%
@@ -20,7 +21,6 @@
               float: bottom;
           }
           #mainMap {
-
               height: 400px;
               width: 50%;
               float: left;
@@ -45,35 +45,56 @@
           .avgBox {
               float: right;
           }
+          #checks {
+            float: right;
+            padding-right: 150px;
+          }
           #tripInfoDiv {
             float: left;
             width: 45%
           }
-          #stats {
+          #tripResults {
             padding-top: 10px;
             float: left;
             width: 50%;
             display: block;
           }
-          #routeScore {
-            height: 200px;
+          #stats {
+            height: 100%;
             float: left;
-            width: 20%;
+            width: 39%;
             text-align: center;
-            outline: 3px solid black;
+            outline: 2px solid black;
+          }
+          #stats1 {
+            text-align: center;
+            width: 50%;
+            float: left;
+          }
+          #stats2 {
+            text-align: center;
+            width: 50%;
+            float: right;
+          }
+          #altRoute {
+            align-self: center;
+            height: 200px;
+            width: 80%;
+            display: inline-block;;
           }
           #top3 {
             padding-left: 12px;
             width: 60%;
-            outline: 3px solid black;
-            float: left;
+            outline: 2px solid black;
+            float: right;
+            height: 100%;
           }
 
       </style>
     </head>
 
     <body>
-            <h1 id="topTag"> Intripid </h1>
+      <h1 id="topTag"> Intripid </h1>
       <div id="mainContainer">
           <div id="mainMap"></div>
           <div class="container">
@@ -92,12 +113,13 @@
 
                               <form id="destForm">
                                   <label>Starting Location:</label>
-                                  <input type="text" class="destBox" name="startingLoc" id="from" value="jacksonville, FL"><br>
-                                  <input type="checkbox" id="isRoundTrip">Is this a round trip?<br><br>
+                                  <input type="text" class="destBox" name="startingLoc" id="from" value="jacksonville, FL"><br><br>
+<!--                                   <input type="checkbox" id="isRoundTrip">Is this a round trip?<br><br> -->
                                   <label>Desired Destinations:</label>
-                                  <input type="text" class="destBox" name="desiredDests" id="desiredDests" value="miami, FL"><br><br>
-                                  <label>Must Go Destinations:</label>
-                                  <input type="text" class="destBox" name="mustGoDest">
+                                  <input type="text" class="destBox" name="desiredDests" id="desiredDests" value="miami, FL">
+<!--                                   <br><br> -->
+<!--                                   <label>Must Go Destinations:</label>
+                                  <input type="text" class="destBox" name="mustGoDest"> -->
                               </form>
 
 
@@ -130,7 +152,7 @@
                   <div class="panel panel-default">
                       <div class="panel-heading">
                           <h5 class="panel-title">
-                              <a data-toggle="collapse" data-parent="#accordion" href="#tripDetails">Additional Trip Options</a>
+                              <a data-toggle="collapse" data-parent="#accordion" href="#tripDetails">Advanced Trip Options</a>
                           </h5>
                       </div>
                       <div id="tripDetails" class="panel-collapse collapse in">
@@ -142,10 +164,10 @@
                                   <input type="text" name="desiredMaxCost"><br><br>
                                   <label>Maximum Trip Distance:</label>
                                   <input type="text" name="maxDist"><br><br>
-                                  <label>Maximum Trip Duration:</label>
-                                  <input type="text" name="maxDuration"><br><br>
+<!--                                   <label>Maximum Trip Duration:</label>
+                                  <input type="text" name="maxDuration"><br><br> -->
                                   <label>Distance Off Route for Stops:</label>
-                                  <input type="text" id="distance" name="distance" size="3" value="3">
+                                  <input type="text" id="distance" name="distance" size="3" value="8">
                               </form>
                             </div>
 
@@ -172,39 +194,61 @@
               </div>
           </div>
 
-          <div id="stats">
+          <div id="tripResults">
+            <div id="stats">
 
-            <div id="routeScore">
-              <label>Entertainment Score:</label><br>
-              <text id="entScore"></text>
+              <legend>Trip Statistics</legend>
+              <label>Entertainment Score</label><br>
+              <text id="entScore"></text><br><br>
+
+              <div id="stats1">
+                <label>Trip Distance</label><br><br>
+                <text id="tripDist"></text><br><br>
+                <label>Estimated Duration</label><br>
+                <text id="duration"></text><br><br>
+              </div>
+
+              <div id=stats2>
+                <label>Number of Places Along Route</label><br>
+                <text id="numStops">-</text><br><br>
+                <label>Estimated Cost</label><br>
+                <text id="cost">$600<br></text>
+              </div>
+
+              <text id="atlTag"><b>------Atlernative Route------</b></text><br><
+              <div id="altRoute"></div>
+
             </div>
 
-
             <div id="top3">
+              <legend id="topTag">Top Three Stops</legend>
               <ol>
                 <li>
 
                   <div id="num1">
                     <label id="num1name"></label><br>
                     <text id="num1phone"></text><br>
+                    <text id="num1website"></text><br>
                     <text id="num1address"></text><br>
-                    <text id="num1rating"></text>
+                    <text id="num1rating"></text><br>
                   </div>
 
-                </li>
+                </li><br>
                 <li>
                   <div id="num2">
                     <label id="num2name"></label><br>
                     <text id="num2phone"></text><br>
+                    <text id="num2website"></text><br>
                     <text id="num2address"></text><br>
-                    <text id="num2rating"></text>
+                    <text id="num2rating"></text><br>
                   </div>
 
-                </li>
+                </li><br>
                 <li>
                   <div id="num3">
                     <label id="num3name"></label><br>
                     <text id="num3phone"></text><br>
+                    <text id="num3website"></text><br>
                     <text id="num3address"></text><br>
                     <text id="num3rating"></text>
                   </div>
@@ -227,6 +271,7 @@
         <script type="text/javascript">
 
             var map = null;
+            var map2 = null;
             var boxpolys = null;
             var directions = null;
             var routeBoxer = null;
@@ -239,6 +284,7 @@
             var dirresult = null;
             var markersArray = [];
             var boxesArray = null;
+            var directionResults = null;
 
             function initialize() {
               // Default the map view to the continental U.S.
@@ -248,7 +294,15 @@
                 zoom: 4
               };
 
+              var mapOptions2 = {
+                center: new google.maps.LatLng(39.8283, -98.5795),
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                zoom: 3,
+                disableDefaultUI: true
+              };
+
               map = new google.maps.Map(document.getElementById("mainMap"), mapOptions);
+              map2 = new google.maps.Map(document.getElementById("altRoute"), mapOptions2);
               service = new google.maps.places.PlacesService(map);
 
               routeBoxer = new RouteBoxer();
@@ -307,7 +361,7 @@
               for (var i =0; i < destinations.length; i++) {
                 formattedDests.push({
                     location: destinations[i],
-                    stopover: true
+                    stopover: true,
                   });
                 }
 
@@ -316,7 +370,8 @@
                 destination: start,
                 waypoints: formattedDests,
                 optimizeWaypoints: true,
-                travelMode: google.maps.DirectionsTravelMode.DRIVING
+                travelMode: google.maps.DirectionsTravelMode.DRIVING,
+                provideRouteAlternatives: true
               }
 
               // Make the directions request
@@ -324,6 +379,22 @@
                 if (status == google.maps.DirectionsStatus.OK) {
                   directionsRenderer.setDirections(result);
                   dirresult = result;
+
+                  var totalMiles = 0;
+                  var totalDuration = 0;
+                  var legs = result.routes[0].legs;
+
+
+                  for (var i=0; i<legs.length;i++) {
+                    totalMiles += legs[i].distance.value*0.000621371192;
+                    totalDuration += legs[i].duration.value;
+                  }
+                  totalDuration = totalDuration/3600;
+
+                  // Change UI
+                  document.getElementById("tripDist").innerHTML = totalMiles.toFixed(0) + " Miles";
+                  document.getElementById("duration").innerHTML = totalDuration.toFixed(1) + " Hours";
+
 
                   var path = result.routes[0].overview_path;
                   boxes = routeBoxer.box(path, distance);
@@ -333,7 +404,7 @@
                     geocodeLatLong(geocoder, boxes[i].f.b, boxes[i].b.b);
                   }
 
-                  drawBoxes();
+                  // drawBoxes();
                   findPlaces(0);
 
                 } else {
@@ -341,7 +412,6 @@
                 }
               });
             }
-
 
 
             function drawBoxes() {
@@ -449,13 +519,13 @@
               for (var i = 0; i < places.length; i++) {
                 var grade = places[i].rating / 5 * 70 + places[i].reviews.length / 5 * 0.15 + places[i].photos.length / 10 * 0.15;
                 totalgrade += grade;
-                if (top3places.length < 3) {
+                if (top3places.length < 3 && top3places[0] != places[i] && top3places[1] != places[i]) {
                   top3places.push(places[i]);
 
                 } else {
                   for (var j = 0; j < top3places.length; j++) {
                     var othergrade = places[j].rating / 5 * 70 + places[j].reviews.length / 5 * 0.15 + places[j].photos.length / 10 * 0.15;
-                    if (grade > top3places[j]) {
+                    if (grade > othergrade) {
                       top3places.splice(j, 1);
                       top3places.push(places[i]);
                       break;
@@ -472,8 +542,8 @@
               }
             // convert from meters to miles
             drivingdist = drivingdist / 1609.344;
-            // based score on a theoretical maximum enjoyment of a 5 star site (max photo, max review) site every 10 miles
-            var score = totalgrade / (drivingdist / 10 * 100) * 100 ;
+            // based score on a theoretical maximum enjoyment of a 5 star site for every site recorded
+            var score = totalgrade / (places.length*100) * 100 ;
             console.log("Expected Enjoyment Score: " + score)
 
 
@@ -482,22 +552,31 @@
               document.getElementById("calcStatus").style.color = "black";
               document.getElementById("extras").innerHTML = "Give us some details below so we can help plan your next trip.";
               document.getElementById("entScore").innerHTML = score.toFixed(1);
+              document.getElementById("numStops").innerHTML = places.length;
 
               // Stats and more
-              // var first = document.getElementById("num1");
-              // var second = document.getElementById("num2");
-              // var third = document.getElementById("num3");
-              var topLocs = [document.getElementById("num1"), document.getElementById("num2"), document.getElementById("num3")];
+              var stopData0 = [top3places[0].name, top3places[0].formatted_phone_number,top3places[0].formatted_address,top3places[0].rating, top3places[0].website];
+              var stopData1 = [top3places[1].name, top3places[1].formatted_phone_number,top3places[1].formatted_address,top3places[1].rating, top3places[1].website];
+              var stopData2 = [top3places[2].name, top3places[2].formatted_phone_number,top3places[2].formatted_address,top3places[2].rating, top3places[2].website];
 
-              var stopData = [];
+              document.getElementById("num1name").innerHTML = stopData0[0];
+              document.getElementById("num1phone").innerHTML = stopData0[1];
+              document.getElementById("num1address").innerHTML = stopData0[2];
+              document.getElementById("num1rating").innerHTML = "Rating: " +stopData0[3];
+              document.getElementById("num1website").innerHTML = stopData0[4];
 
-              console.log(top3places[i].name);
-              // for (var i=0; i<3; i++) {
-              //   stopData = [top3places[i].name]
-              //   for (var j=0; j<4; j++)
-              //     topLocs[i].element[j].innerHTML =
-              //   }
-              // }
+              document.getElementById("num2name").innerHTML = stopData1[0];
+              document.getElementById("num2phone").innerHTML = stopData1[1];
+              document.getElementById("num2address").innerHTML = stopData1[2];
+              document.getElementById("num2rating").innerHTML = "Rating: " +stopData1[3];
+              document.getElementById("num1website").innerHTML = stopData1[4];
+
+              document.getElementById("num3name").innerHTML = stopData2[0];
+              document.getElementById("num3phone").innerHTML = stopData2[1];
+              document.getElementById("num3address").innerHTML = stopData2[2];
+              document.getElementById("num3rating").innerHTML = "Rating: " +stopData2[3];
+              document.getElementById("num1website").innerHTML = stopData2[4];
+
             }
 
 
@@ -564,8 +643,7 @@
                     infowindow.open(map, marker);
                   }
                 });
-
-               });
+              });
               marker.setMap(map);
             }
 
