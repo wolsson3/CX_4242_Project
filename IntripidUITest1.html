@@ -138,7 +138,7 @@
 
                               <form id="carForm">
                                   <label>Year:</label><p><b>Or enter your average MPG:</b></p>
-                                  <input type="text" name="carYear" id="carYear"><br><br><input type="text" name="userAvgMpg" class="avgBox">
+                                  <input type="text" name="carYear" id="carYear"><br><br><input type="text" name="userAvgMpg" class="avgBox" id = "userAvgMpg">
                                   <label>Make:</label>
                                   <input type="text" name="carMake" id="carMake"><br><br>
                                   <label>Model:</label>
@@ -161,9 +161,9 @@
                             <div id="tripInfoDiv">
                               <form id="tripForm">
                                   <label>Maximum Trip Cost:</label>
-                                  <input type="text" name="desiredMaxCost"><br><br>
+                                  <input type="text" name="desiredMaxCost" id = "maxCost"><br><br>
                                   <label>Maximum Trip Distance:</label>
-                                  <input type="text" name="maxDist"><br><br>
+                                  <input type="text" name="maxDist" id = "maxDist"><br><br>
 <!--                                   <label>Maximum Trip Duration:</label>
                                   <input type="text" name="maxDuration"><br><br> -->
                                   <label>Distance Off Route for Stops:</label>
@@ -18883,7 +18883,16 @@
               var make = document.getElementById("carMake").value
               var model = document.getElementById("carModel").value
               var year = document.getElementById("carYear").value
-              var mpg = mpg_data[make + model + year];
+              var mpg;
+
+              if (document.getElementById("userAvgMpg").value == "") {
+                mpg = mpg_data[make + model + year]
+                if (mpg === undefined) {
+                  alert("Your car was not found in our database.");
+                }
+              } else {
+                mpg = parseInt(document.getElementById("userAvgMpg").value);
+              }
               var state_counts = {}
               var tot_boxes = 0;
               var avg_price = 0;
@@ -18906,6 +18915,17 @@
               avg_price = avg_price / tot_boxes;
 
               totalCost = Math.round(((thisDist / mpg) * avg_price),2);
+
+              var maxCost = parseInt(document.getElementById("maxCost").value);
+              if (maxCost < totalCost) {
+                alert("The cost of the trip is greater than your desired cost.");
+              }
+
+              var maxDist = parseInt(document.getElementById("maxDist").value);
+              if (maxDist < thisDist) {
+                alert("The distance of the trip is greater than your desired distance.");
+              }
+
 
               document.getElementById("cost").innerHTML = "$" + totalCost.toFixed(2)
               }
