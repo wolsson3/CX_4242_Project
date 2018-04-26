@@ -17,7 +17,7 @@ INSTALLATION
 
 2. Install a text editor such as Sublime or Atom. Download link for Sublime is here: https://www.sublimetext.com/3
 
-3. Open Intripid.html with your text editor. On line XXX, paste your API key where it says "key=". Then save the file. Now the package is ready to run.
+3. Open Intripid.html with your text editor. On line 267, paste your API key where it says "key=". Then save the file. Now the package is ready to run.
 
 
 
@@ -26,10 +26,10 @@ EXECUTION
 ---------
 1. Open Intripid.html with your preferred web browser. We recommend Google Chrome.
 
-2. Under the Destinations dropdown, enter your starting location (such as "Atlanta, GA"), desired destinations separated by a semicolon (such as "Savannah, GA; Jacksonville, FL"), must-go destinations (if we must see Savannah, enter "Savannah, GA"), and preferred site categories ("amusement_park, movie_theater, spa, zoo").
+2. Under the Destinations dropdown, enter your starting location (such as "Atlanta, GA"), desired destinations separated by a semicolon (such as "Savannah, GA; Jacksonville, FL"), must-go destinations (if we must see Savannah, enter "Savannah, GA"), and preferred site categories ("amusement_park, park, zoo").
 
 3. Under the Car Details dropdown, enter the make, model, and year of the vehicle. For this demo, select 1985 Ferrari 308.
 
-4. For Additional Trip Options, leave all blank for this demo except for Distance Off Route For Stops. Leave this at the default 3 miles. Click Calculate Route.
+4. For Additional Trip Options, leave all blank for this demo except for Distance Off Route For Stops. Leave this at the default 8 miles. Click Calculate Route.
 
 5. The output shows route details, expected enjoyment, and the top three sites along the route.

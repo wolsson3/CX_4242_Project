@@ -137,7 +137,7 @@
 
 
                               <form id="carForm">
-                                  <label>Year:</label><p><b>Or eneter your average MPG:</b></p>
+                                  <label>Year:</label><p><b>Or enter your average MPG:</b></p>
                                   <input type="text" name="carYear" id="carYear"><br><br><input type="text" name="userAvgMpg" class="avgBox">
                                   <label>Make:</label>
                                   <input type="text" name="carMake" id="carMake"><br><br>
@@ -18619,12 +18619,8 @@
                         statects();
                       }
 
-                      //console.log(state);
-                      //return state;
                     }
-                    //console.log(state_counts);
                   }
-                  //console.log(state_counts);
                 } else {
                   window.alert('No results found');
                 }
@@ -18634,12 +18630,6 @@
                   }, 200);
               }
               });
-            // if (ctr === lgth) {
-            //   console.log(ctr)
-            //   console.log(lgth)
-            //   console.log('hello')
-            // }
-
 
             }
 
@@ -18706,40 +18696,14 @@
                   i = 0;
                   lgth = boxes.length;
                   while (i < boxes.length) {
-                    //console.log('hi')
-                    //console.log('Searching boxes ' + i + "/" + lgth)
                     geocodeLatLong(geocoder, boxes[i].f.b, boxes[i].b.b);
-                    //console.log(allstates)
                     i++;
                   }
-                  //console.log('done')
-                  //console.log(boxes.length)
-                  //statects();
-
-
-                  // for (var i = 0; i < boxes.length; i++) {
-                  //   var state = geocodeLatLong(geocoder, boxes[i].f.b, boxes[i].b.b, ctr, boxes.length);
-                  //   //console.log(state)
-                  //   state_counts[state] = state_counts[state] ? state_counts[state] + 1 : 1;
-                  //   ctr += 1;
-
-
-                  // }
-
-
-                  //console.log(allstates)
-
-
-                  // console.log(Object.keys(state_counts));
-
-                  // console.log(state_counts);
-
-                  totalCost = tripCost(state_counts, mpg_data, totalMiles)
 
                   // Change UI
                 document.getElementById("tripDist").innerHTML = totalMiles.toFixed(0) + " Miles";
                 document.getElementById("duration").innerHTML = totalDuration.toFixed(1) + " Hours";
-                document.getElementById("cost").innerHTML = "$" + totalCost.toFixed(2)
+          
 
                   // drawBoxes();
                   findPlaces(0);
@@ -18755,9 +18719,7 @@
 
 
             function statects() {
-              console.log('we done')
-              console.log(allstates)
-
+              tripCost(allstates, mpg_data)
             }
 
             function drawBoxes() {
@@ -18791,11 +18753,8 @@
 
               request.types = type;
 
-              //if (!!keyword && (keyword != "")) request.keyword = keyword;
-              //if (!!name && (name != "")) request.name = name;
               service.radarSearch(request, function(results, status) {
                 if (status == google.maps.places.PlacesServiceStatus.OK) {
-                  //document.getElementById('side_bar').innerHTML += "bounds[" + searchIndex + "] returns " + results.length + " results<br>"
                   for (var i = 0, result; result = results[i]; i++) {
                     service.getDetails(result, function(place, status) {
                       if (status == 'OK') {
@@ -18810,7 +18769,6 @@
                 if (status != 'OVER_QUERY_LIMIT') {
                   searchIndex++;
                   if (searchIndex < boxes.length) {
-                    //console.log('Searching boxes ' + searchIndex + "/" + boxes.length)
                     findPlaces(searchIndex);
                   } else {
                     recordPlaces();
@@ -18826,6 +18784,7 @@
 
 
             function clearOverlays() {
+              allstates = [];
               // clear boxes
               if (boxesArray != null) {
                 for (var i = 0; i < boxesArray.length; i++) {
@@ -18856,8 +18815,6 @@
                     typeof categorieslist[places[p].types[t]] === 'undefined' ? categorieslist[places[p].types[t]] = 1 : categorieslist[places[p].types[t]]++;
                  }
               }
-/*              console.log("Count of Type Occurrances: *note that these overlap since sites have more than one type*")
-              console.log(categorieslist)*/
 
               var top3places = [];
               for (var i = 0; i < places.length; i++) {
@@ -18877,8 +18834,6 @@
                   }
                 }
               }
-/*            console.log("Top 3 Places:")
-            console.log(top3places)*/
             drivingdist = 0;
             var legs = dirresult.routes[0].legs;
               for (var k = 0; k < legs.length; ++k) {
@@ -18888,7 +18843,6 @@
             drivingdist = drivingdist / 1609.344;
             // based score on a theoretical maximum enjoyment of a 5 star site for every site recorded
             var score = totalgrade / (places.length*100) * 100 ;
-            // console.log("Expected Enjoyment Score: " + score)
 
 
               // UI changes
@@ -18925,30 +18879,35 @@
 
 
 
-            function tripCost(state_counts, mpg_data, dist) {
+            function tripCost(allstates, mpg_data) {
               var make = document.getElementById("carMake").value
               var model = document.getElementById("carModel").value
               var year = document.getElementById("carYear").value
-              var mpg = mpg_data[make + model + year]
-              var state_names = Object.keys(state_counts);
+              var mpg = mpg_data[make + model + year];
+              var state_counts = {}
               var tot_boxes = 0;
               var avg_price = 0;
-              //console.log(state_names);
-              //console.log(state_counts["Florida"]);
+
+              var dist = document.getElementById("tripDist").innerHTML;
+              var thisDist = parseInt(dist.split(" ")[0]);
 
 
-              for (state in state_names) {
+
+              for (var i = 0; i < allstates.length; i ++) {
+                state_counts[allstates[i]] = state_counts[allstates[i]] ? state_counts[allstates[i]] + 1 : 1; 
+              }
+
+
+              for (state in state_counts) {
                 tot_boxes += state_counts[state];
-                //console.log(state_counts[state]);
                 avg_price += (state_counts[state] * gas_prices[state]);
               };
 
-              //console.log(state_counts);
-              //console.log(tot_boxes);
-
               avg_price = avg_price / tot_boxes;
 
-              return Math.round(((dist / mpg) * avg_price),2)
+              totalCost = Math.round(((thisDist / mpg) * avg_price),2);
+
+              document.getElementById("cost").innerHTML = "$" + totalCost.toFixed(2)
               }
 
             function createMarker(place) {
