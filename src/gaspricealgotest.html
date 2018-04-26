@@ -18341,6 +18341,8 @@
               var state_names = Object.keys(state_counts);
               var tot_boxes = 0;
               var avg_price = 0;
+
+              console.log(state_counts);
               for (state in state_counts) {
                 tot_boxes += state_counts[state];
                 avg_price += (state_counts[state] * gas_prices[state]);
