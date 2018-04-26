@@ -285,9 +285,11 @@
             var markersArray = [];
             var boxesArray = null;
             var directionResults = null;
+            var allstates = [];
+            var lgth = 0;
 
-            
-            gas_prices = 
+
+            gas_prices =
   {
      Alabama:2.438,
      Alaska:3.172,
@@ -18602,7 +18604,7 @@
             }
 
 
-            function geocodeLatLong(geocoder, lat, lng, state_counts) {
+            function geocodeLatLong(geocoder, lat, lng) {
               var latlng = {lat: lat, lng: lng};
               geocoder.geocode({'location': latlng}, function(results, status) {
               if (status === 'OK') {
@@ -18611,22 +18613,37 @@
                   for (var i = 0; i < address.length; i++) {
                     if (address[i]['types'].length == 2 && address[i]['types'][0] == 'administrative_area_level_1'){
                       var state = address[i]['long_name'];
+
+                      allstates.push(state);
+                      if (allstates.length == lgth) {
+                        statects();
+                      }
+
                       //console.log(state);
-                      return state;
+                      //return state;
                     }
-                    console.log(state_counts);
+                    //console.log(state_counts);
                   }
-                  console.log(state_counts);
+                  //console.log(state_counts);
                 } else {
                   window.alert('No results found');
                 }
               } else if (status === 'OVER_QUERY_LIMIT') {
                 setTimeout(function() {
-                  return geocodeLatLong(geocoder, lat, lng, state_counts);
+                  return geocodeLatLong(geocoder, lat, lng);
                   }, 200);
               }
               });
+            // if (ctr === lgth) {
+            //   console.log(ctr)
+            //   console.log(lgth)
+            //   console.log('hello')
+            // }
+
+
             }
+
+
 
 
             function route() {
@@ -18686,40 +18703,61 @@
                   boxes = routeBoxer.box(path, distance);
                   var states = [];
 
-                  for (var i = 0; i < boxes.length; i++) {
-                    state = geocodeLatLong(geocoder, boxes[i].f.b, boxes[i].b.b, state_counts);
-                    state_counts[state] = state_counts[state] ? state_counts[state] + 1 : 1;
+                  i = 0;
+                  lgth = boxes.length;
+                  while (i < boxes.length) {
+                    //console.log('hi')
+                    //console.log('Searching boxes ' + i + "/" + lgth)
+                    geocodeLatLong(geocoder, boxes[i].f.b, boxes[i].b.b);
+                    //console.log(allstates)
+                    i++;
                   }
+                  //console.log('done')
+                  //console.log(boxes.length)
+                  //statects();
 
-                  var notDone = true;
 
-                  while (notDone) {
-                    if ('undefined' in state_counts === false) {
-                      notDone = false;
-                    } else setTimeout(function() {console.log('waiting');}, 3000);
-                  };
+                  // for (var i = 0; i < boxes.length; i++) {
+                  //   var state = geocodeLatLong(geocoder, boxes[i].f.b, boxes[i].b.b, ctr, boxes.length);
+                  //   //console.log(state)
+                  //   state_counts[state] = state_counts[state] ? state_counts[state] + 1 : 1;
+                  //   ctr += 1;
 
-                  console.log(Object.keys(state_counts));
 
-                  console.log(state_counts);
+                  // }
+
+
+                  //console.log(allstates)
+
+
+                  // console.log(Object.keys(state_counts));
+
+                  // console.log(state_counts);
 
                   totalCost = tripCost(state_counts, mpg_data, totalMiles)
 
                   // Change UI
-                  document.getElementById("tripDist").innerHTML = totalMiles.toFixed(0) + " Miles";
-                  document.getElementById("duration").innerHTML = totalDuration.toFixed(1) + " Hours";
-                  document.getElementById("cost").innerHTML = "$" + totalCost.toFixed(2) 
+                document.getElementById("tripDist").innerHTML = totalMiles.toFixed(0) + " Miles";
+                document.getElementById("duration").innerHTML = totalDuration.toFixed(1) + " Hours";
+                document.getElementById("cost").innerHTML = "$" + totalCost.toFixed(2)
 
                   // drawBoxes();
                   findPlaces(0);
 
 
-                
+
 
                 } else {
                   alert("Directions query failed: " + status);
                 }
               });
+            }
+
+
+            function statects() {
+              console.log('we done')
+              console.log(allstates)
+
             }
 
             function drawBoxes() {
@@ -18895,18 +18933,18 @@
               var state_names = Object.keys(state_counts);
               var tot_boxes = 0;
               var avg_price = 0;
-              console.log(state_names);
-              console.log(state_counts["Florida"]);
+              //console.log(state_names);
+              //console.log(state_counts["Florida"]);
 
 
               for (state in state_names) {
                 tot_boxes += state_counts[state];
-                console.log(state_counts[state]);
+                //console.log(state_counts[state]);
                 avg_price += (state_counts[state] * gas_prices[state]);
               };
 
-              console.log(state_counts);
-              console.log(tot_boxes);
+              //console.log(state_counts);
+              //console.log(tot_boxes);
 
               avg_price = avg_price / tot_boxes;
 
