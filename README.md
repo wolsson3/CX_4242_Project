@@ -1,4 +1,4 @@
-# Intripid Road Trip Optimizier
+# Intripid Road Trip Optimizer
 
 DESCRIPTION
 -----------
