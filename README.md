@@ -1,8 +1,8 @@
-# Intripid
+# Intripid Road Trip Optimizier
 
 DESCRIPTION
 -----------
-This package intends to simplify the process of road trip planning. This set files contains all necessary dependencies and datasets to calculate the optimal road trip given a set of desired destinations. 
+This package intends to simplify the process of road trip planning. This set of files contains all necessary dependencies and datasets to calculate the optimal road trip given a set of desired destinations. 
 
 Vehicle data has been scraped and cleaned from the EPA's gas mileage dataset. Over 50,000 data points are included for vehicle mpg rates within Intripid.html. The Google Maps API and Places API have the capacity to search over 20 petabytes of data. Despite this extremely large amount of data, Intripid ensures the optimal sites along your route in an efficient manner.
 
