@@ -1,4 +1,4 @@
-# Intripid
+# Intripid Road Trip Optimizier
 
 DESCRIPTION
 -----------
